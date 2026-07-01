@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0B0B0B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.json">
+<link rel="stylesheet" href="style.css">
+<title>TradePilot Genesis</title>
+</head>
+<body>
+<main class="app">
+<section id="splash" class="splash">
+<img src="assets/logo.png" class="splash-logo" alt="TradePilot Logo">
+<p class="claim">Trading beginnt beim Verstehen.</p>
+<p class="tagline"><span class="red">Learn.</span> <span>Plan.</span> <span class="green">Trade.</span></p>
+</section>
+
+<section id="mainApp" class="hidden">
+<header class="topbar">
+<img src="assets/logo.png" class="logo-small" alt="TP">
+<div><h1 id="pageTitle">Home</h1><p id="pageSubtitle">Trading beginnt beim Verstehen.</p></div>
+</header>
+
+<section id="home" class="page active">
+<div class="hero-card">
+<p class="small">Heute empfohlen</p>
+<h2>Was ist ein Hebel?</h2>
+<p>4 Minuten · Level 1</p>
+<button onclick="openTerm('hebel')">Jetzt lernen</button>
+</div>
+<div class="card">
+<div class="card-head"><h2>Mein Weg</h2><span>Level 1</span></div>
+<div class="progress"><div style="width:35%"></div></div>
+<p class="muted">Nächste Lektion: Stop-Loss verstehen</p>
+</div>
+<div class="quick-grid">
+<button onclick="go('tools')">🧮 Rechner</button>
+<button onclick="go('academy')">🎓 Academy</button>
+<button onclick="openTerm('margin')">📖 Margin</button>
+<button onclick="openTerm('liquidation')">⚠️ Liquidation</button>
+</div>
+</section>
+
+<section id="tools" class="page">
+<div class="card">
+<h2>Risiko-Rechner</h2>
+<label>Richtung</label>
+<div class="segmented"><button id="longBtn" class="active" onclick="setDirection('long')">Long</button><button id="shortBtn" onclick="setDirection('short')">Short</button></div>
+<label>Kontogröße (€)</label><input id="balance" type="number" inputmode="decimal" value="300">
+<label>Risiko pro Trade (%) <button class="word" onclick="openTerm('risiko')">?</button></label><input id="risk" type="number" inputmode="decimal" value="2">
+<label>Hebel <button class="word" onclick="openTerm('hebel')">?</button></label><input id="leverage" type="number" inputmode="decimal" value="10">
+<label>Einstieg</label><input id="entry" type="number" inputmode="decimal" value="100000">
+<label>Stop-Loss <button class="word" onclick="openTerm('stoploss')">?</button></label><input id="stop" type="number" inputmode="decimal" value="99000">
+<button class="primary" onclick="calculate()">Berechnen</button>
+</div>
+<div class="card">
+<h2>Trade Check</h2>
+<div class="result-grid">
+<div><span>Max. Verlust</span><b id="loss">–</b></div>
+<div><span>Positionsgröße</span><b id="position">–</b></div>
+<div><span>Margin</span><b id="margin">–</b></div>
+<div><span>CRV</span><b>1 : 2</b></div>
+<div><span>TP 1:2</span><b id="tp2">–</b></div>
+<div><span>Status</span><b id="status">–</b></div>
+</div>
+<div class="coach">💡 Passendes Wissen:
+<button onclick="openTerm('hebel')">Hebel</button>
+<button onclick="openTerm('margin')">Margin</button>
+<button onclick="openTerm('liquidation')">Liquidation</button>
+</div>
+</div>
+</section>
+
+<section id="academy" class="page">
+<div class="search"><input id="search" placeholder="Trading-Begriff suchen..." oninput="renderTerms()"></div>
+<div class="card">
+<h2>Mein Weg</h2>
+<div class="path-item" onclick="openTerm('hebel')"><span>🌱 Level 1</span><b>Grundlagen</b><p>Hebel, Margin, Long & Short</p></div>
+<div class="path-item" onclick="openTerm('stoploss')"><span>🛡️ Level 2</span><b>Risiko verstehen</b><p>Stop-Loss, CRV, Positionsgröße</p></div>
+<div class="path-item" onclick="openTerm('support')"><span>📈 Level 3</span><b>Charts lesen</b><p>Support, Resistance, Trend</p></div>
+</div>
+<div class="card"><h2>Glossary</h2><div id="termList" class="term-list"></div></div>
+</section>
+
+<section id="journal" class="page">
+<div class="card empty"><h2>Journal</h2><p>Hier speicherst du später deine Trades, Emotionen, Screenshots und Learnings.</p><button class="primary">Trade hinzufügen</button></div>
+</section>
+
+<section id="more" class="page">
+<div class="card">
+<h2>Einstellungen</h2>
+<label>Sprache</label><select><option>Deutsch</option><option>English</option></select>
+<label>Standard-Risiko (%)</label><input type="number" value="2">
+<label>Standard-Hebel</label><input type="number" value="10">
+<div class="pro-card"><h3>TradePilot Pro</h3><p>AI Coach, ChartScan, Cloud und erweiterte Statistiken. Später verfügbar.</p></div>
+</div>
+</section>
+
+<nav class="bottom">
+<button class="nav active" onclick="go('home')">🏠<span>Home</span></button>
+<button class="nav" onclick="go('tools')">🧮<span>Tools</span></button>
+<button class="nav" onclick="go('academy')">🎓<span>Academy</span></button>
+<button class="nav" onclick="go('journal')">📒<span>Journal</span></button>
+<button class="nav" onclick="go('more')">⚙️<span>Mehr</span></button>
+</nav>
+</section>
+
+<div id="modal" class="modal hidden" onclick="closeModal(event)">
+<div class="sheet">
+<button class="close" onclick="hideModal()">×</button>
+<p id="modalLevel" class="small green"></p>
+<h2 id="modalTitle"></h2>
+<p id="modalText"></p>
+<div class="example"><b>Beispiel</b><p id="modalExample"></p></div>
+<p class="muted" id="modalMistake"></p>
+</div>
+</div>
+</main>
+<script src="app.js"></script>
+</body>
+</html>
